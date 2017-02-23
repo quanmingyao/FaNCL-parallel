@@ -14,6 +14,8 @@
 #include "FaNCL.h"
 #include "tools.h"
 
+using namespace std;
+
 CooSparse ReadData(const char* fileName)
 {
 	MM_typecode banner = { 0 };
@@ -46,7 +48,7 @@ CooSparse ReadData(const char* fileName)
 
 int main()
 {
-	std::string traFile = "data/movielens1m.txt";
+	std::string traFile = "D:/WebDisk/data/netflix.txt";
 	CooSparse traData = ReadData(traFile.c_str());
 	ZScoreNorm(traData.pData, traData.nnz);
 

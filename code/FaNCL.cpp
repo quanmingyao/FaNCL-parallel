@@ -17,20 +17,20 @@ using namespace std;
 
 /******************** global parameter for parallel *********************/
 const long long g_maxIter = 500;
-ofstream g_LogFile("2.txt");
+ofstream g_LogFile("1.txt");
 
-const long long g_rowSpt = 3;
+const long long g_rowSpt = 6;
 const long long g_colSpt = g_rowSpt;
 
 const long long g_maxPwIter = 2;
 
 // partially observed matrix
-vector<CooSparse> g_data = vector<CooSparse>(g_rowSpt*g_colSpt);
+vector<CooSparse> g_data(g_rowSpt*g_colSpt);
 // matrix for multiplication
-vector<CsrSparse> g_csrSpa = vector<CsrSparse>(g_rowSpt*g_colSpt);
+vector<CsrSparse> g_csrSpa(g_rowSpt*g_colSpt);
 
-vector<double*> g_partXY1 = vector<double*>(g_rowSpt*g_colSpt);
-vector<double*> g_partXY0 = vector<double*>(g_rowSpt*g_colSpt);
+vector<double*> g_partXY1(g_rowSpt*g_colSpt);
+vector<double*> g_partXY0(g_rowSpt*g_colSpt);
 
 CooSparse g_tsData;
 
@@ -125,7 +125,7 @@ void UpdateFactUV(const vector<CMatrix>& iU, vector<CMatrix>& oU, const CMatrix&
 	return loss + reg;
 } */
 
-double GetObjectVal(const vector<double*>& pred,
+/* double GetObjectVal(const vector<double*>& pred,
 	const vector<CooSparse>& data,
 	const CVector& sv,
 	const double lambda, const double theta, RegType regType)
@@ -159,7 +159,7 @@ double GetObjectVal(const vector<double*>& pred,
 	RegObj(&reg, sv.pData, sv.length, lambda, theta, regType);
 
 	return loss + reg;
-}
+} */
 
 double GetObjectVal(const vector<double>& blkLoss, const CVector& sv, const double lambda, const double theta, RegType regType)
 {
@@ -356,8 +356,6 @@ void PowerMethod_splr_pl(const long long thdID,
 
 		if (0 == thdID) { QRFact_pl(g_Vt, g_Vqr); }
 	}
-
-	g_barrier->Wait();
 }
 
 // for acceleration
@@ -427,8 +425,6 @@ void PowerMethod_splr_pl(const long long thdID,
 			QRFact_pl(g_Vt, g_Vqr);
 		}
 	}
-
-	g_barrier->Wait();
 }
 
 void ReduceMat_pl(const long long thdID, 
